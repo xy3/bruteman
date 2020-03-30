@@ -1,0 +1,14 @@
+URL: https://connect.emby.media/service/user/authenticate
+
+headers:
+  Host: connect.emby.media
+  X-Application: Emby Web/4.4.0.51
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36
+  Origin: http://app.emby.media
+  Referer: http://app.emby.media/
+
+pattern: 'email:password'
+
+data:
+  nameOrEmail: $email
+  rawpw: $password
