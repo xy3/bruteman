@@ -11,13 +11,14 @@ class Bruteman(object):
 		
 		self.checker = Checker(
 				url = config['url'],
-				headers = config['headers'],
-				data_format = config['data_format']
+				headers = config['headers']
 			)
 		
 		self.pool = mp.Pool(config['threads'], self.init_worker)
 		manager = mp.Manager()
 		self.queue = manager.Queue()
+
+		self.dc = DataCompiler(config['pattern'], config['data_format'])
 
 	
 	def init_worker(self):
@@ -49,8 +50,8 @@ class Bruteman(object):
 					
 					combo = combo.strip()
 
-					# todo: match combo to pattern
-					user = User(combo)
+					data = self.dc.compile(combo)
+					
 					if user:
 						job = self.pool.apply_async(self.checker.check, (user, self.queue))
 						jobs.append(job)

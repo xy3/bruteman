@@ -10,20 +10,14 @@ import yaml
 
 
 class Checker(object):
-	def __init__(self, url, headers, data_format):
+	def __init__(self, url, headers):
 		self.url = url
-		self.data_format = data_format
 		self.session = requests.Session()
 		self.session.headers.update(headers)
 
 
 
-	def check(self, user, queue):
-		data = {
-			'nameOrEmail': user.email,
-			'rawpw': user.password
-		}
-
+	def check(self, data, queue):
 		try:
 			res = self.session.post(URL, data)
 		except Exception as e:
@@ -32,9 +26,9 @@ class Checker(object):
 		
 
 		if res.status_code == 200:
-			content = json.loads(res.content)
-			if content['AccessToken'] != '':
-				user.data = content
+			# content = json.loads(res.content)
+			# if content['AccessToken'] != '':
+			# 	user.data = content
 				queue.put(user)
 				return user
 			

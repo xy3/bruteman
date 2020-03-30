@@ -31,10 +31,11 @@ class ConfigParser(object):
 
 		for i,c in enumerate(configs):
 			print(f"{i:>{lc+1}}: {c}")
-			choice = int(input(f"Enter the number of the config you wish to use: "))
-			if lc >= choice:
-				return configs[choice]
 
+		choice = int(input(f"Enter the number of the config you wish to use: "))
+		if lc >= choice:
+			return configs[choice]
+		
 		return False
 
 
