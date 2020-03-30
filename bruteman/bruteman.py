@@ -2,16 +2,21 @@ import sys, requests, yaml, signal
 import multiprocessing as mp
 from time import time
 
+from checker import Checker
+from datacompiler import DataCompiler
+
 
 class Bruteman(object):
-	"""docstring for Bruteman"""
-	def __init__(self):
-		super(Bruteman, self).__init__()
-		self.checker = Checker()
-		self.config = ConfigParser()
+	def __init__(self, config):
 		
-		self.pool = mp.Pool(60, self.init_worker)
-		self.manager = mp.Manager()
+		self.checker = Checker(
+				url = config['url'],
+				headers = config['headers'],
+				data_format = config['data_format']
+			)
+		
+		self.pool = mp.Pool(config['threads'], self.init_worker)
+		manager = mp.Manager()
 		self.queue = manager.Queue()
 
 	
