@@ -1,3 +1,4 @@
+method: post
 URL: https://connect.emby.media/service/user/authenticate
 
 headers:
@@ -12,3 +13,5 @@ pattern: 'email:password'
 data:
   nameOrEmail: $email
   rawpw: $password
+
+threads: 60
