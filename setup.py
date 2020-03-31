@@ -22,13 +22,13 @@ setuptools.setup(
 	python_requires='>=3.6',
 	install_requires=[
 		'requests',
-		'json',
-		'time',
 		'pprint',
-		'hashlib',
 		'termcolor',
-		'multiprocessing',
-		'signal',
 		'pyyaml'
 	],
+	entry_points={
+		'console_scripts':[
+			'bruteman=bruteman.brute:main',
+			]
+		},
 )

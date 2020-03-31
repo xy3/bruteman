@@ -1,13 +1,17 @@
-import sys, signal
+import sys, signal, argparse
 import multiprocessing as mp
 from time import time
 from termcolor import colored as color
+from pprint import pprint
 
+
+from configparser import ConfigParser
 from checker import Checker
 from datacompiler import DataCompiler
 
 
 class Bruteman(object):
+	"""docstring for Bruteman"""
 	def __init__(self, config, combos):
 		self.combos = combos
 		self.checker = Checker(config)
@@ -73,6 +77,23 @@ class Bruteman(object):
 
 
 
+def main():
+	psr = argparse.ArgumentParser()
+	psr.add_argument('-c', '--config', help="YAML Config file for Bruteman")
+	# TODO: directory change in code
+	psr.add_argument('-o', '--output', metavar='OUTPUT DIR', help="Output directory to save working and failed combinations")
+	
+	psr.add_argument('combos', help="Login combinations file")
+	args = psr.parse_args()
+
+	cp = ConfigParser(args.config)
+	
+	if not cp.parsed:
+		sys.exit(0)
+
+	bm = Bruteman(cp.config, args.combos)
+	bm.start()
+	
 
 if __name__ == '__main__':
 	main()
