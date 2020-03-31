@@ -1,3 +1,6 @@
+import time
+from hashlib import md5
+
 class DataCompiler(object):
 	def __init__(self, pattern, data_format):
 		self.pattern = pattern
@@ -10,9 +13,6 @@ class DataCompiler(object):
 		self.splits = pattern.count(self.delimiter)
 		self.variables = self.pattern.split(self.delimiter)
 
-		# for k,v in data_format:
-			# if v in self.variables
-
 
 	def compile(self, combo):
 		details = {}
@@ -22,10 +22,23 @@ class DataCompiler(object):
 
 		data = {}		
 		for k, v in self.data_format.items():
+			# replace variable names with the value
 			if v in details:
-				# if v is a variable name, replace it
-				# with the value into data_format
 				data[k] = details[v]
+			
+			# replace time with timestamp
+			elif v == 'time':
+				data[k] = int(time.time())
+
+			# Hash password if md5 in v
+			elif 'md5' in str(v):
+				pw = v.split()[1]
+				if pw in details:
+					data[k] = md5(details[pw].encode()).hexdigest()
+
+			# TODO: add more hashing algorithms
+			else:
+				data[k] = v
 		
 		return data
 

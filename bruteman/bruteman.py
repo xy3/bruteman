@@ -1,23 +1,19 @@
-import sys, requests, yaml, signal
+import sys, signal
 import multiprocessing as mp
 from time import time
+from termcolor import colored as color
 
 from checker import Checker
 from datacompiler import DataCompiler
 
 
 class Bruteman(object):
-	def __init__(self, config):
-		
-		self.checker = Checker(
-				url = config['url'],
-				headers = config['headers']
-			)
+	def __init__(self, config, combos):
+		self.combos = combos
+		self.checker = Checker(config)
 		
 		self.pool = mp.Pool(config['threads'], self.init_worker)
-		manager = mp.Manager()
-		self.queue = manager.Queue()
-
+		self.queue = mp.Manager().Queue()
 		self.dc = DataCompiler(config['pattern'], config['data_format'])
 
 	
@@ -40,7 +36,7 @@ class Bruteman(object):
 		total_lines = 0
 
 		try:
-			with open(sys.argv[1], 'r') as combo_file:
+			with open(self.combos, 'r') as combo_file:
 				for combo in combo_file:
 					i += 1
 					total_lines += 1
@@ -52,8 +48,8 @@ class Bruteman(object):
 
 					data = self.dc.compile(combo)
 					
-					if user:
-						job = self.pool.apply_async(self.checker.check, (user, self.queue))
+					if data:
+						job = self.pool.apply_async(self.checker.check, (data, combo, self.queue))
 						jobs.append(job)
 			
 			print(color('Total to check: ', 'cyan'), total_lines - starting_index)

@@ -1,6 +1,7 @@
 method: post
 url: https://connect.emby.media/service/user/authenticate
 response_type: json
+success_keyword: AccessToken
 
 headers:
   Host: connect.emby.media

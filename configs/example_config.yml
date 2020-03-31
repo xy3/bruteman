@@ -2,6 +2,10 @@
 method: post
 # URL for the requests
 url: https://example.com/login
+# The type of response the server returns. Can be text or json
+response_type: json
+# The text keyword or json key that is present in a successful server response
+success_keyword: '"success":true'
 
 # You can set headers here to bypass origin, referer and user-agent restrictions.
 headers:
@@ -21,15 +25,19 @@ pattern: 'email:password'
 # here as if they were variable names. 
 
 data_format:
+  timestamp: time         # time is a magic keyword that will be replaced with the current timestamp
   nameOrEmail: email
   rawpw: password
+  hashedpw: md5 password  # md5 is a magic keyword that md5 hashes the ensuing token
 
-# For example, if 'admin@email.com:Password123' is parsed with the pattern
-# 'email:password', the data_format above would be filled out as follows:
+# For example; 'admin@email.com:Password123' parsed with the pattern 'email:password'
+# would result in the following:
 
 # data_format:
+#   timestamp: 1585621762
 #   nameOrEmail: admin@email.com
 #   rawpw: Password123
+#   hashedpw: 42f749ade7f9e195bf475f37a44cafcb
 
 
 # Define the number of threads you wish to use

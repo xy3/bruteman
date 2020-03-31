@@ -1,0 +1,16 @@
+method: post
+url: https://www.cineplexx.at/service/login.php
+success_keyword: '"success":true'
+
+headers:
+  Origin: https://www.cineplexx.at
+
+pattern: 'email:password'
+
+data_format:
+  ts: time
+  email: email
+  password: md5 password
+  hashed: true
+
+threads: 60

@@ -1,36 +1,37 @@
 import requests, json, sys
-from time import time
 from pprint import pprint
-from hashlib import md5
 from termcolor import colored as color
-import multiprocessing as mp
-import signal
-import yaml
 
 
 
 class Checker(object):
-	def __init__(self, url, headers):
-		self.url = url
+	def __init__(self, config):
+		self.url = config['url']
+		self.method = config['method']
+		self.success_keyword = config['success_keyword']
 		self.session = requests.Session()
-		self.session.headers.update(headers)
+		self.session.headers.update(config['headers'])
 
 
 
-	def check(self, data, queue):
+	def check(self, data, combo, queue):
 		try:
-			res = self.session.post(URL, data)
+			if self.method == 'post':
+				res = self.session.post(self.url, data)
+			else:
+				res = self.session.get(self.url, data)
 		except Exception as e:
 			queue.put('bad')
 			return
 		
-
 		if res.status_code == 200:
-			# content = json.loads(res.content)
-			# if content['AccessToken'] != '':
-			# 	user.data = content
-				queue.put(user)
-				return user
+			content = res.text
+			# if config['response_type'] == 'json':
+				# content = json.loads(res.content)
+			
+			if self.success_keyword in content:
+				queue.put(combo)
+				return combo
 			
 		queue.put('bad')
 		return False
